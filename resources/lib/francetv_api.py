@@ -22,6 +22,7 @@ import dateutil.parser
 from requests import Session
 from requests.exceptions import RequestException
 
+from smartdns.adapter import SmartdnsAdapter
 
 class FranceTVAPIException(Exception):
     pass
@@ -48,6 +49,7 @@ class FranceTVAPI(object):
 
         try:
             with Session() as session:
+                session.mount('http://', SmartdnsAdapter())
                 response = session.get(_url, params=query)
                 return response.json() if json else response.text
         except RequestException as ex:
